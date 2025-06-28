@@ -101,14 +101,24 @@ export const login = async (req, res) => {
         expiresIn: "1d"
     });
 // store token in cookie
-res.cookie("token", token);
+res.cookie("Token", token);
 
     res.status(200).json({
       message: "User logged in successfully",
       user: {
-        email,
-        password: user.password,
-       
+       token, // send token in response
+        _id: user._id,
+        username: user.username,
+        roll: user.roll,
+        classname: user.classname,
+        semester: user.semester,
+        branch: user.branch,
+        phone: user.phone,
+        address: user.address,
+        image: {
+          publicId: user.image.publicId,
+          url: user.image.url
+        }
       },
     });
   } catch (error) {
@@ -120,9 +130,10 @@ res.cookie("token", token);
 };
 // get user data
 export const getUserData = async (req, res) => {
-  const {Id}=req.params;
+  // const {Id}=req.Id;
   try {
-    const userdata = await User.findById(Id);
+    const userdata = await User.findById(req.userId).select("-password -__v");
+    // console.log(userdata," userdata");
     if (!userdata) {
       return res.status(404).json({
         message: "User not found",
@@ -137,4 +148,4 @@ export const getUserData = async (req, res) => {
       message: "Error in fetching user data",
     });
   }
-};
+}

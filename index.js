@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import userroutes from "./routes/user.routes.js";
 import mongoose from "mongoose";
 import cors from "cors";
+import cookieParser from "cookie-parser"; 
 import fileUpload from "express-fileupload";
 import { v2 as cloudinary } from 'cloudinary';
 dotenv.config();
@@ -10,13 +11,15 @@ const app = express();
 const PORT = process.env.PORT;
 // middelewire
 app.use(express.json());
-
- // Cors middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(cors({
   origin: "http://localhost:5173",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
+
+
 }))
 // File upload service
 app.use(fileUpload({
