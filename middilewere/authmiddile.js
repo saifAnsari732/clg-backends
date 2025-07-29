@@ -4,7 +4,6 @@ import { User } from "../Models/user.model.js";
 export const authMiddleware = async (req, res, next) => {
   // Get the token from the request headers
    const authHeader = req.headers.authorization;
-  console.log(authHeader,"authHeader");
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ errors: "No token provided" });
   }

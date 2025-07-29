@@ -38,11 +38,12 @@ try {
 }
 // Routing
 app.use("/api/v1/user", userroutes);
+// app.use("/api/v1/attendance", atten);
 
 // Cloudinary Configuration Code
-    cloudinary.config({ 
-      cloud_name: "dc0eskzxx" ,
-      api_key: "645985342632788" ,  
+    cloudinary.config({
+      cloud_name: "dc0eskzxx",
+      api_key: "645985342632788",   
       api_secret: "iu7MJQ6i5XHaX-yjn5-YodGakdg", 
   });
 app.listen(PORT, () => {

@@ -1,18 +1,23 @@
 import { User } from "../Models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { v2 as cloudinary } from 'cloudinary';
+import { v2 as cloudinary } from "cloudinary";
 
 // register
 export const register = async (req, res) => {
-  const { username, email, password, roll, classname, semester, branch, phone, address } = req.body;
+  const {
+    username,
+    email,
+    password,
+    roll,
+    classname,
+    semester,
+    branch,
+    phone,
+    address,
+  } = req.body;
   try {
-    // Validation
-    if (!username || !email || !password || !roll || !classname || !semester || !branch || !phone || !address) {
-      return res.status(400).json({
-        message: "All fields are required",
-      });
-    }
+   
     // cloudinary image upload
     const { image } = req.files;
     if (!image) {
@@ -21,14 +26,16 @@ export const register = async (req, res) => {
       });
     }
     // Allow formate
-  const allowedFormat = ["image/png", "image/jpeg"];
+    const allowedFormat = ["image/png", "image/jpeg"];
     if (!allowedFormat.includes(image.mimetype)) {
       return res
         .status(400)
         .json({ errors: "Invalid file format. Only PNG and JPG are allowed" });
     }
-     // Upload image to cloudinary
-    const cloudinaryResponse = await cloudinary.uploader.upload(image.tempFilePath);
+    // Upload image to cloudinary
+    const cloudinaryResponse = await cloudinary.uploader.upload(
+      image.tempFilePath
+    );
     if (!cloudinaryResponse || cloudinaryResponse.error) {
       return res
         .status(400)
@@ -53,16 +60,16 @@ export const register = async (req, res) => {
       branch,
       phone,
       address,
-     image:{
+      image: {
         publicId: cloudinaryResponse.public_id,
-        url: cloudinaryResponse.url
-     }
+        url: cloudinaryResponse.url,
+      },
     });
     // Save user to database
     const user = await newuser.save();
     res.status(201).json({
       message: "User registered successfully",
-      user
+      user,
     });
   } catch (error) {
     console.log(error);
@@ -95,31 +102,21 @@ export const login = async (req, res) => {
       });
     }
     //   Generate JWT token
-    const token = await jwt.sign({
-      _id: user.id,
-    },process.env.JWT_SECRET,{
-        expiresIn: "1d"
-    });
-// store token in cookie
-res.cookie("Token", token);
+    const token = jwt.sign(
+      {
+        _id: user.id,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+    // store token in cookie
+    res.cookie("Token", token);
 
     res.status(200).json({
       message: "User logged in successfully",
-      user: {
-       token, // send token in response
-        _id: user._id,
-        username: user.username,
-        roll: user.roll,
-        classname: user.classname,
-        semester: user.semester,
-        branch: user.branch,
-        phone: user.phone,
-        address: user.address,
-        image: {
-          publicId: user.image.publicId,
-          url: user.image.url
-        }
-      },
+      token,
     });
   } catch (error) {
     console.log(error);
@@ -133,7 +130,7 @@ export const getUserData = async (req, res) => {
   // const {Id}=req.Id;
   try {
     const userdata = await User.findById(req.userId).select("-password -__v");
-    // console.log(userdata," userdata");
+
     if (!userdata) {
       return res.status(404).json({
         message: "User not found",
@@ -148,4 +145,6 @@ export const getUserData = async (req, res) => {
       message: "Error in fetching user data",
     });
   }
-}
+};
+
+
