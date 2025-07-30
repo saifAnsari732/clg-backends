@@ -2,6 +2,7 @@ import { User } from "../Models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
+import { Attendance } from "../Models/attendence.js";
 
 // register
 export const register = async (req, res) => {
@@ -112,9 +113,13 @@ export const login = async (req, res) => {
       }
     );
     // store token in cookie
-    res.cookie("Token", token);
-
-    res.status(200).json({
+    const cokiesExpire={
+      expires:  new Date(Date.now()+24*60*60*1000),//24*60*60*1000
+      httpOnly: true,  // catnot be accessed via javascript
+      secure: 'Production'===false, // false for http and true for https
+    }
+    res.cookie("Token", token, cokiesExpire);
+    await res.status(200).json({
       message: "User logged in successfully",
       token,
     });
@@ -146,5 +151,23 @@ export const getUserData = async (req, res) => {
     });
   }
 };
+
+// logout
+export const logout = async (req, res) => {
+  try {
+    // Clear the cookie
+    res.clearCookie("Token");
+    res.status(200).json({
+      message: "User logged out successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error in logout",
+    });
+  }
+}
+// 
+
 
 

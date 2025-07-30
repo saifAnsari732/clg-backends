@@ -13,12 +13,29 @@ export const markAttendance = async (req, res) => {
 };
 
 // Get attendance for a student
-export const getAttendance = async (req, res) => {
+export const getattendence = async (req, res) => {
   try {
     const { studentId } = req.params;
     const records = await Attendance.find({ student: studentId });
     res.json(records);
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+};
+
+
+
+// get All Attendance 
+// Handle both getAll and getByStudentId
+export const allAttendance = async (req, res) => {
+  try {
+    const query = req.params.studentId 
+      ? { student: req.params.studentId } 
+      : {};
+    const records = await Attendance.find(query);
+    res.json(records);
+  } catch (err) {
+    console.error("Error fetching attendance:", err);
+    res.status(500).json({ message: "Failed to fetch attendance" });
   }
 };
