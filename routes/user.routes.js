@@ -1,7 +1,7 @@
 import express from 'express';
 import {   getUserData, login, logout, register } from '../controller/user.controller.js';
 import { authMiddleware } from '../middilewere/authmiddile.js';
-import {     allAttendance, getattendence, markAttendance } from '../controller/attendence.controller.js';
+import {    getattendence, markAttendance } from '../controller/attendence.controller.js';
 
 const router= express.Router();
 
@@ -11,7 +11,7 @@ router.get('/logout',logout )
 router.get('/data',authMiddleware,getUserData )
 router.post("/mark", markAttendance);
 router.get("/:studentId", getattendence);
-router.get("/allAttendance", allAttendance);
+
 
 
 export default router;

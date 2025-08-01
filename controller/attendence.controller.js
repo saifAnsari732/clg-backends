@@ -4,6 +4,12 @@ import { Attendance } from "../Models/attendence.js";
 export const markAttendance = async (req, res) => {
   try {
     const { student, date, status } = req.body;
+    const existingdate = await Attendance.findOne({ date });
+    if (existingdate) {
+      return res.status(400).json({ error: "Attendance this date already exists" });
+    }
+  //  date local date
+
     const attendance = new Attendance({ student, date, status });
     await attendance.save();
     res.status(201).json({ attendance, message: "Attendance marked successfully" });
@@ -25,17 +31,3 @@ export const getattendence = async (req, res) => {
 
 
 
-// get All Attendance 
-// Handle both getAll and getByStudentId
-export const allAttendance = async (req, res) => {
-  try {
-    const query = req.params.studentId 
-      ? { student: req.params.studentId } 
-      : {};
-    const records = await Attendance.find(query);
-    res.json(records);
-  } catch (err) {
-    console.error("Error fetching attendance:", err);
-    res.status(500).json({ message: "Failed to fetch attendance" });
-  }
-};
