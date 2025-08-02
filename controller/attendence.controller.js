@@ -23,7 +23,7 @@ export const getattendence = async (req, res) => {
   try {
     const { studentId } = req.params;
     const records = await Attendance.find({ student: studentId });
-    res.json(records);
+    res.json({records, message: "Attendance records fetched successfully"});
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
