@@ -112,6 +112,15 @@ export const login = async (req, res) => {
         expiresIn: "1d",
       }
     );
+    // date today
+    const date=new Date().toLocaleString("en-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).split(",")[0];
+    // reverse date format to dd-mm-yyyy
+    const formattedDate = date.split("-").reverse().join("-");
+    // console.log(formattedDate);
     // store token in cookie
     const cokiesExpire={
       expires:  new Date(Date.now()+24*60*60*1000),//24*60*60*1000
@@ -122,6 +131,8 @@ export const login = async (req, res) => {
     await res.status(200).json({
       message: "User logged in successfully",
       token,
+      date:formattedDate,
+      
     });
   } catch (error) {
     console.log(error);

@@ -4,13 +4,14 @@ import { Attendance } from "../Models/attendence.js";
 export const markAttendance = async (req, res) => {
   try {
     const { student, date, status } = req.body;
-    const existingdate = await Attendance.findOne({ date });
-    if (existingdate) {
-      return res.status(400).json({ error: "Attendance this date already exists" });
+   
+  //  date localdate split the other part
+    if (!student || !date || !status) {
+      return res.status(400).json({ message: "All fields are required" });
     }
-  //  date local date
+     const localdate=date.split("T")[0];
 
-    const attendance = new Attendance({ student, date, status });
+    const attendance = new Attendance({ student, date:localdate, status });
     await attendance.save();
     res.status(201).json({ attendance, message: "Attendance marked successfully" });
   } catch (err) {
