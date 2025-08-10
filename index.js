@@ -31,14 +31,13 @@ app.use(fileUpload({
 // DB connection
 const DB_UR = process.env.MONGO_URI;
 try {
-  await mongoose.connect(DB_UR);
+   mongoose.connect(DB_UR);
   console.log("Database connected successfully");
 } catch (error) {
   console.log(error);
 }
 // Routing
 app.use("/api/v1/user", userroutes);
-// app.use("/api/v1/attendance", atten);
 
 // Cloudinary Configuration Code
     cloudinary.config({
