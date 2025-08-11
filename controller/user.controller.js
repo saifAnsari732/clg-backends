@@ -234,7 +234,7 @@ export const resetpassword = async (req, res) => {
   }
 };
 
-// validate user for password rese
+// validate user forgat password 
 export const forgatpassword = async (req, res) => {
   const { id, token } = req.params;
   //  console.log(id,token);
@@ -261,19 +261,23 @@ export const forgatpassword = async (req, res) => {
   }
 };
 
-// password veriify
+// password veriif
 export const verifypassword = async (req, res) => {
   const { id, token } = req.params;
   const { password } = req.body;
+  // console.log("password",password);
   try {
     const validuser = await User.findOne({ _id: id, verifytoken: token });
     const varifitoken = jwt.verify(token, process.env.JWT_SECRET);
-    if (validuser||varifitoken ) {
+// console.log(validuser);
+    if (validuser) {
+      const newpassword = await bcrypt.hash(password, 10);
+      
       const setnewuserpass = await User.findByIdAndUpdate(
         { _id: id },
         { password: newpassword }
       );
-      const newpassword = await bcrypt.hash(password, 10);
+      // console.log("updat euser",setnewuserpass);
       setnewuserpass.save();
       res
         .status(201)
