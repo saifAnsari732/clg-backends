@@ -31,7 +31,7 @@ app.use(fileUpload({
 // DB connection
 const DB_UR = process.env.MONGO_URI;
 try {
-   mongoose.connect(DB_UR);
+  await mongoose.connect(DB_UR);
   console.log("Database connected successfully");
 } catch (error) {
   console.log(error);
