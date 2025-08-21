@@ -118,7 +118,7 @@ export const login = async (req, res) => {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1d",
+        expiresIn: "30min",
       }
     );
     // date today
@@ -261,7 +261,7 @@ export const forgatpassword = async (req, res) => {
   }
 };
 
-// password veriif
+// password verii
 export const verifypassword = async (req, res) => {
   const { id, token } = req.params;
   const { password } = req.body;
